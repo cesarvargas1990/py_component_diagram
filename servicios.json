@@ -1,0 +1,84 @@
+{
+  "config": {
+    "espacio_entre_zonas": "0.5"
+  },
+  "zonas": [
+    {
+      "nombre": "Wolkvox",
+      "color": "#E8F5FF",
+      "servicios": [
+        {
+          "nombre": "wolkvox",
+          "puerto": "xxx",
+          "conexiones": ["apigateway"]
+        }
+      ],
+      "cuadros": []
+    },
+    {
+      "nombre": "Zona de integracion Externos",
+      "color": "#E8F5FF",
+      "servicios": [],
+      "cuadros": [
+        {
+          "nombre": "Capacidad 1",
+          "servicios": [
+            {
+              "nombre": "consul",
+              "puerto": "8500"
+            },
+            {
+              "nombre": "apigateway",
+              "puerto": "8080",
+              "conexiones": ["consul", "keycloak", "mongo","wolkvox"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Zona de negocio",
+      "color": "#FFF6E8",
+      "servicios": [],
+      "cuadros": [
+        {
+          "nombre": "Capacidad 2",
+          "servicios": [
+            {
+              "nombre": "facade",
+              "puerto": "8083",
+              "conexiones": ["keycloak", "consul"]
+            },
+            {
+              "nombre": "keycloak",
+              "puerto": "8080",
+              "conexiones": ["postgres"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Zona de datos / Almacenamiento",
+      "color": "#E8FFEC",
+      "servicios": [],
+      "cuadros": [
+        {
+          "nombre": "Capacidad 3",
+          "servicios": [
+            {
+              "nombre": "postgres",
+              "puerto": "5432",
+              "conexiones": ["keycloak"]
+            },
+            {
+              "nombre": "mongo",
+              "puerto": "27017",
+              "conexiones": ["apigateway"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
