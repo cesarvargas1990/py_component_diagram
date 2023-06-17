@@ -30,7 +30,7 @@
       "cuadros": [
         {
           "color": "#c7e6f5",
-          "nombre": "Capacidad 1",
+          "nombre": "Capacidad 1 (10.196.68.42)",
           "servicios": [
             {
               "color": "#fce9e9",
@@ -67,7 +67,7 @@
       "cuadros": [
         {
           "color": "#c7e6f5",
-          "nombre": "Capacidad 2",
+          "nombre": "Capacidad 2 (10.194.92.43)",
           "servicios": [
             {
               "color": "#fce9e9",
@@ -105,7 +105,7 @@
       "cuadros": [
         {
           "color": "#c7e6f5",
-          "nombre": "Capacidad 3",
+          "nombre": "Capacidad 3 (10.194.93.44)",
           "servicios": [
             {
               "color": "#fce9e9",
@@ -132,7 +132,7 @@
       "cuadros": [
         {
           "color": "#c7e6f5",
-          "nombre": "sims",
+          "nombre": "sims (10.185.18.21)",
           "servicios": [
             {
               "color": "#fce9e9",
