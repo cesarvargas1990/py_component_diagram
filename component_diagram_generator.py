@@ -31,15 +31,13 @@ def generate_component_diagram(json_file, output_diagram_file):
             for service in services:
                 service_name = service.get('nombre')
                 service_port = service.get('puerto')
-                connections = service.get('conexiones', [])
+                service_color = service.get('color', 'lightgray')  # Color por defecto: lightgray
+                service_font_color = service.get('color_fuente', 'black')  # Color por defecto: negro
 
-                # Verificar si el servicio es "wolkvox" o "apigateway"
-                if service_name in ['wolkvox', 'apigateway']:
-                    # Agregar el servicio como un cuadro al subgrafo de la zona
-                    subgraph.node(service_name, shape='box', label=f'{service_name}\nPort: {service_port}')
-                else:
-                    # Agregar el servicio como un nodo normal al subgrafo de la zona
-                    subgraph.node(service_name, label=f'{service_name}\nPort: {service_port}')
+            
+                subgraph.node(service_name, label=f'{service_name}\nPort: {service_port}', style='filled', fillcolor=service_color, fontcolor=service_font_color)
+
+                connections = service.get('conexiones', [])
 
                 # Agregar las conexiones del servicio
                 for connection in connections:
@@ -60,20 +58,24 @@ def generate_component_diagram(json_file, output_diagram_file):
             for box in boxes:
                 box_name = box.get('nombre')
                 box_services = box.get('servicios', [])
+                box_color = box.get('color', 'lightgray')  # Color por defecto: lightgray
 
                 # Crear un subgrafo para el cuadro dentro de la zona
                 with subgraph.subgraph(name=f'cluster_{zone_name}_{box_name}') as box_subgraph:
-                    box_subgraph.attr(style='filled', color='lightgray')
+                    box_subgraph.attr(style='filled', color=box_color)
                     box_subgraph.attr(label=box_name)
 
                     # Agregar los servicios dentro del cuadro
                     for box_service in box_services:
                         box_service_name = box_service.get('nombre')
                         box_service_port = box_service.get('puerto')
-                        box_connections = box_service.get('conexiones', [])
+                        box_service_color = box_service.get('color', 'lightgray')  # Color por defecto: lightgray
+                        box_service_font_color = box_service.get('color_fuente', 'black')  # Color por defecto: negro
 
                         # Agregar el servicio como un cuadro al subgrafo del cuadro
-                        box_subgraph.node(box_service_name, shape='box', label=f'{box_service_name}\nPort: {box_service_port}')
+                        box_subgraph.node(box_service_name, shape='box', label=f'{box_service_name}\nPort: {box_service_port}', style='filled', fillcolor=box_service_color, fontcolor=box_service_font_color)
+
+                        box_connections = box_service.get('conexiones', [])
 
                         # Agregar las conexiones del servicio dentro del cuadro
                         for box_connection in box_connections:
