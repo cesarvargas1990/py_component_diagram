@@ -19,10 +19,11 @@ def generate_component_diagram(json_file, output_diagram_file):
         zone_name = zone.get('nombre')
         zone_color = zone.get('color', '#FFFFFF')  # Color por defecto: blanco
 
-        # Crear un subgrafo para la zona
+        # Crear un subgrafo para la zona con borde negro y grosor reducido
         with graph.subgraph(name=f'cluster_{zone_name}') as subgraph:
-            subgraph.attr(style='filled', color=zone_color)
+            subgraph.attr(style='filled', color=zone_color, penwidth='1', peripheries='1')  # Ajustar el grosor del borde al subgrafo y eliminar el borde exterior
             subgraph.attr(label=zone_name)
+            subgraph.attr(fontcolor='black')  # Color de fuente en negro
 
             services = zone.get('servicios', [])
             boxes = zone.get('cuadros', [])
@@ -52,33 +53,37 @@ def generate_component_diagram(json_file, output_diagram_file):
                         subgraph.edge(service_name, connection)
 
             # Agregar los cuadros de la zona
-            for box in boxes:
-                box_name = box.get('nombre')
-                box_services = box.get('servicios', [])
+            with subgraph.subgraph(name=f'cluster_{zone_name}_box') as zone_box_subgraph:
+                zone_box_subgraph.attr(style='filled', color='black', penwidth='1', label='')  # Ajustar el grosor del borde al subgrafo de los cuadros de la zona
 
-                # Crear un subgrafo para el cuadro dentro de la zona
-                with subgraph.subgraph(name=f'cluster_{zone_name}_{box_name}') as box_subgraph:
-                    box_subgraph.attr(style='filled', color='lightgray')
-                    box_subgraph.attr(label=box_name)
+                # Agregar los cuadros de la zona
+                for box in boxes:
+                    box_name = box.get('nombre')
+                    box_services = box.get('servicios', [])
 
-                    # Agregar los servicios dentro del cuadro
-                    for box_service in box_services:
-                        box_service_name = box_service.get('nombre')
-                        box_service_port = box_service.get('puerto')
-                        box_connections = box_service.get('conexiones', [])
+                    # Crear un subgrafo para el cuadro dentro de la zona
+                    with zone_box_subgraph.subgraph(name=f'cluster_{zone_name}_{box_name}') as box_subgraph:
+                        box_subgraph.attr(style='filled', color='lightgray')
+                        box_subgraph.attr(label=box_name)
 
-                        # Agregar el servicio como un cuadro al subgrafo del cuadro
-                        box_subgraph.node(box_service_name, shape='box', label=f'{box_service_name}\nPort: {box_service_port}')
+                        # Agregar los servicios dentro del cuadro
+                        for box_service in box_services:
+                            box_service_name = box_service.get('nombre')
+                            box_service_port = box_service.get('puerto')
+                            box_connections = box_service.get('conexiones', [])
 
-                        # Agregar las conexiones del servicio dentro del cuadro
-                        for box_connection in box_connections:
-                            # Comprobar si la conexión está dentro del cuadro
-                            if box_connection in box_services:
-                                # Conexión dentro del cuadro: agregar una flecha
-                                box_subgraph.edge(box_service_name, box_connection)
-                            else:
-                                # Conexión fuera del cuadro: agregar una flecha al subgrafo de la zona principal
-                                graph.edge(box_service_name, box_connection)
+                            # Agregar el servicio como un cuadro al subgrafo del cuadro
+                            box_subgraph.node(box_service_name, shape='box', label=f'{box_service_name}\nPort: {box_service_port}')
+
+                            # Agregar las conexiones del servicio dentro del cuadro
+                            for box_connection in box_connections:
+                                # Comprobar si la conexión está dentro del cuadro
+                                if box_connection in box_services:
+                                    # Conexión dentro del cuadro: agregar una flecha
+                                    box_subgraph.edge(box_service_name, box_connection)
+                                else:
+                                    # Conexión fuera del cuadro: agregar una flecha al subgrafo de la zona principal
+                                    graph.edge(box_service_name, box_connection)
 
     # Renderizar el diagrama y guardarlo en un archivo
     graph.render(output_diagram_file, view=True)
