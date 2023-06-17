@@ -7,4 +7,4 @@ Crea un diagrama de componentes leyendo un json
  ## Ejemplo de estructura
  Modificar archivo servicios.json de acuerdo a sus requerimientos
  ## Ejecutar 
- python3 component_diagram_generator.py
+ `python3 component_diagram_generator.py`
