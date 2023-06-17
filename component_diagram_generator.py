@@ -1,6 +1,6 @@
 import json
 from graphviz import Digraph
-
+ 
 def generate_component_diagram(json_file, output_diagram_file):
     with open(json_file, 'r') as file:
         data = json.load(file)
