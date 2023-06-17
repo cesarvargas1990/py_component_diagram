@@ -30,7 +30,7 @@
             {
               "nombre": "apigateway",
               "puerto": "8080",
-              "conexiones": ["consul", "keycloak", "mongo","wolkvox"]
+              "conexiones": ["consul", "keycloak", "mongo"]
             }
           ]
         }
