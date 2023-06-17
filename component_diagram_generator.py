@@ -33,8 +33,13 @@ def generate_component_diagram(json_file, output_diagram_file):
                 service_port = service.get('puerto')
                 connections = service.get('conexiones', [])
 
-                # Agregar el servicio como un cuadro al subgrafo de la zona
-                subgraph.node(service_name, shape='box', label=f'{service_name}\nPort: {service_port}')
+                # Verificar si el servicio es "wolkvox" o "apigateway"
+                if service_name in ['wolkvox', 'apigateway']:
+                    # Agregar el servicio como un cuadro al subgrafo de la zona
+                    subgraph.node(service_name, shape='box', label=f'{service_name}\nPort: {service_port}')
+                else:
+                    # Agregar el servicio como un nodo normal al subgrafo de la zona
+                    subgraph.node(service_name, label=f'{service_name}\nPort: {service_port}')
 
                 # Agregar las conexiones del servicio
                 for connection in connections:
